@@ -12,7 +12,7 @@ import numpy as np
 
 def main():
 
-    green = (0, 255, 0)
+    red = (0, 0, 255)
     video = cv.VideoCapture()
     video.open(0, cv.CAP_DSHOW)
     while True:
@@ -32,7 +32,7 @@ def main():
         if len(faces) > 0:
 
             for (x, y, w, h) in faces:
-                cv.rectangle(frame, (x, y), (x + w, y + h), green, 2)
+                cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
 
             cv.imwrite("UnknownUser.jpg", frame)
 

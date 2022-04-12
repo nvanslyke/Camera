@@ -12,6 +12,7 @@ import numpy as np
 
 def main():
 
+    green = (0, 255, 0)
     video = cv.VideoCapture()
     video.open(0, cv.CAP_DSHOW)
     while True:
@@ -21,12 +22,17 @@ def main():
         faceCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
         faces = faceCascade.detectMultiScale(
             grey,
-            scaleFactor=1.3,
+            scaleFactor=1.4,
             minNeighbors=3,
-            minSize=(30, 30)
+            minSize=(75, 75)
         )
 
+
+
         if len(faces) > 0:
+
+            for (x, y, w, h) in faces:
+                cv.rectangle(frame, (x, y), (x + w, y + h), green, 2)
 
             cv.imwrite("UnknownUser.jpg", frame)
 
@@ -58,7 +64,7 @@ def send_text(file):
                  )
         print("Text sent successfully")
     except:
-        print("Error, text was not sent")
+         print("Error, text was not sent")
 
 
 if __name__ == "__main__":

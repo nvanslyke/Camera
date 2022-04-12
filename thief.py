@@ -5,12 +5,13 @@ import os
 from PIL import Image
 import PIL
 import time
+from datetime import datetime
 import numpy as np
 
 
 
 def main():
-    path_to_photo = "C:\\Users\\nvans\\Desktop\\facePhoto\\"
+
     video = cv.VideoCapture()
     video.open(0, cv.CAP_DSHOW)
     while True:
@@ -29,7 +30,8 @@ def main():
 
             cv.imwrite("UnknownUser.jpg", frame)
 
-            send_text()
+            send_text("UnknownUser.jpg")
+            break
 
         cv.imshow('cam', frame)
         if cv.waitKey(1) == ord('q'):
@@ -38,18 +40,25 @@ def main():
     video.release()
     cv.destroyAllWindows()
 
-def send_text():
+def send_text(file):
+    now = datetime.now()
+
     email = "throwaway3123456@gmail.com"
     password = "fgzpxpcvkycqhsye"
-
-    UnknownUser = ["<img src='C:\\Users\\nvans\\Desktop\\Camera\\UnknownUser'>"]
-
+    subject = 'Unauthorized User Detected'
+    recipient = '5128155645@mms.att.net'
+    current_time = now.strftime("%H:%M:%S")
+    content = "Time = " + str(current_time)
     try:
         yag = yagmail.SMTP(user=email, password=password)
-        yag.send(to='5128155645@mms.att.net', subject='Unauthorized User Detected', contents=UnknownUser)
-        print("Email sent successfully")
-    finally:
-        print("Error, email was not sent")
+        yag.send(to=recipient,
+                 subject=subject,
+                 contents=content,
+                 attachments=file
+                 )
+        print("Text sent successfully")
+    except:
+        print("Error, text was not sent")
 
 
 if __name__ == "__main__":

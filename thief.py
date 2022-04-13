@@ -9,34 +9,46 @@ from datetime import datetime
 import numpy as np
 
 
-
 def main():
 
     red = (0, 0, 255)
     video = cv.VideoCapture()
     video.open(0, cv.CAP_DSHOW)
+
+    faceCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
+    eyeCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_eye.xml")
+
+    breaker = False
+
     while True:
         useless, frame = video.read()
         grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-        faceCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
+
         faces = faceCascade.detectMultiScale(
             grey,
-            scaleFactor=1.4,
+            scaleFactor=1.1,
             minNeighbors=3,
             minSize=(75, 75)
         )
 
+        for (x, y, w, h) in faces:
 
+            cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
+            roi_grey = grey[y:y + h, x:x + w]
+            roi_color = frame[y:y+h, x:x+w]
 
-        if len(faces) > 0:
+            eyes = eyeCascade.detectMultiScale(roi_grey)
 
-            for (x, y, w, h) in faces:
-                cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
+            if len(eyes) > 1:
 
-            cv.imwrite("UnknownUser.jpg", frame)
+                cv.imwrite("UnknownUser.jpg", frame)
+                send_text("UnknownUser.jpg")
 
-            send_text("UnknownUser.jpg")
+                breaker = True
+                break
+
+        if breaker:
             break
 
         cv.imshow('cam', frame)
@@ -45,6 +57,7 @@ def main():
 
     video.release()
     cv.destroyAllWindows()
+
 
 def send_text(file):
     now = datetime.now()

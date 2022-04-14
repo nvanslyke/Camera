@@ -10,9 +10,11 @@ from datetime import datetime
 import numpy as np
 
 
+red = (0, 0, 255)
+
 def main():
 
-    red = (0, 0, 255)
+
     video = cv.VideoCapture()
 
     if platform.system() == "Windows":
@@ -23,36 +25,14 @@ def main():
     face_cascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
     eye_cascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_eye.xml")
 
-    breaker = False
-
     while True:
+
         useless, frame = video.read()
         grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-        faces = face_cascade.detectMultiScale(
-            grey,
-            scaleFactor=1.1,
-            minNeighbors=3,
-            minSize=(75, 75)
-        )
-
-        for (x, y, w, h) in faces:
-
-            cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
-            roi_grey = grey[y:y + h, x:x + w]
-            roi_color = frame[y:y+h, x:x+w]
-
-            eyes = eye_cascade.detectMultiScale(roi_grey)
-
-            if len(eyes) > 1:
-
-                cv.imwrite("UnknownUser.jpg", frame)
-                send_text("UnknownUser.jpg")
-
-                breaker = True
-                break
-
-        if breaker:
+        if face_detected(face_cascade, eye_cascade, grey, frame):
+            cv.imwrite("UnknownUser.jpg", frame)
+            send_text("UnknownUser.jpg")
             break
 
         cv.imshow('cam', frame)
@@ -62,6 +42,26 @@ def main():
     video.release()
     cv.destroyAllWindows()
 
+def face_detected(face_cascade, eye_cascade, grey, frame):
+
+    faces = face_cascade.detectMultiScale(
+        grey,
+        scaleFactor=1.1,
+        minNeighbors=3,
+        minSize=(75, 75)
+    )
+
+    for (x, y, w, h) in faces:
+
+        cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
+        roi_grey = grey[y:y + h, x:x + w]
+        roi_color = frame[y:y + h, x:x + w]
+
+        eyes = eye_cascade.detectMultiScale(roi_grey)
+
+        if len(eyes) > 1:
+            return True
+    return False
 
 def send_text(file):
     now = datetime.now()
@@ -86,5 +86,3 @@ def send_text(file):
 
 if __name__ == "__main__":
     main()
-
-

@@ -20,8 +20,8 @@ def main():
     else:
         video.open(0, cv.CAP_V4L)
 
-    faceCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
-    eyeCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_eye.xml")
+    face_cascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
+    eye_cascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_eye.xml")
 
     breaker = False
 
@@ -29,8 +29,7 @@ def main():
         useless, frame = video.read()
         grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-
-        faces = faceCascade.detectMultiScale(
+        faces = face_cascade.detectMultiScale(
             grey,
             scaleFactor=1.1,
             minNeighbors=3,
@@ -43,7 +42,7 @@ def main():
             roi_grey = grey[y:y + h, x:x + w]
             roi_color = frame[y:y+h, x:x+w]
 
-            eyes = eyeCascade.detectMultiScale(roi_grey)
+            eyes = eye_cascade.detectMultiScale(roi_grey)
 
             if len(eyes) > 1:
 

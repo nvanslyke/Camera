@@ -12,6 +12,7 @@ import numpy as np
 
 red = (0, 0, 255)
 
+
 def main():
 
 
@@ -33,6 +34,7 @@ def main():
         if face_detected(face_cascade, eye_cascade, grey, frame):
             cv.imwrite("UnknownUser.jpg", frame)
             send_text("UnknownUser.jpg")
+            os.remove("UnknownUser.jpg")
             break
 
         cv.imshow('cam', frame)
@@ -48,18 +50,16 @@ def face_detected(face_cascade, eye_cascade, grey, frame):
         grey,
         scaleFactor=1.1,
         minNeighbors=3,
-        minSize=(75, 75)
+        minSize=(50, 50)
     )
 
     for (x, y, w, h) in faces:
 
-        cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
         roi_grey = grey[y:y + h, x:x + w]
-        roi_color = frame[y:y + h, x:x + w]
-
         eyes = eye_cascade.detectMultiScale(roi_grey)
 
         if len(eyes) > 1:
+            cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
             return True
     return False
 

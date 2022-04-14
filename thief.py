@@ -1,6 +1,7 @@
 import cv2 as cv
 import yagmail
 import yagmail.oauth2
+import platform
 import os
 from PIL import Image
 import PIL
@@ -13,7 +14,11 @@ def main():
 
     red = (0, 0, 255)
     video = cv.VideoCapture()
-    video.open(0, cv.CAP_DSHOW)
+
+    if platform.system() == "Windows":
+        video.open(0, cv.CAP_DSHOW)
+    else:
+        video.open(0, cv.CAP_V4L)
 
     faceCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
     eyeCascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_eye.xml")

@@ -1,9 +1,9 @@
 import cv2 as cv
 
-red = (0, 0, 255)
-
 
 def face_detected(face_cascade, eye_cascade, grey, frame):
+
+    red = (0, 0, 255)
 
     faces = face_cascade.detectMultiScale(
         grey,

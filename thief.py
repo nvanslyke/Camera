@@ -1,20 +1,16 @@
 import cv2 as cv
-import yagmail
-import yagmail.oauth2
 import platform
 import os
 from PIL import Image
 import PIL
 import time
-from datetime import datetime
 import numpy as np
-
-
-red = (0, 0, 255)
+import face_recognition
+import sendtext
+import facedetect
 
 
 def main():
-
 
     video = cv.VideoCapture()
 
@@ -31,9 +27,9 @@ def main():
         useless, frame = video.read()
         grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-        if face_detected(face_cascade, eye_cascade, grey, frame):
+        if facedetect.face_detected(face_cascade, eye_cascade, grey, frame):
             cv.imwrite("UnknownUser.jpg", frame)
-            send_text("UnknownUser.jpg")
+            sendtext.send_text("UnknownUser.jpg")
             os.remove("UnknownUser.jpg")
             break
 
@@ -43,45 +39,6 @@ def main():
 
     video.release()
     cv.destroyAllWindows()
-
-def face_detected(face_cascade, eye_cascade, grey, frame):
-
-    faces = face_cascade.detectMultiScale(
-        grey,
-        scaleFactor=1.1,
-        minNeighbors=3,
-        minSize=(50, 50)
-    )
-
-    for (x, y, w, h) in faces:
-
-        roi_grey = grey[y:y + h, x:x + w]
-        eyes = eye_cascade.detectMultiScale(roi_grey)
-
-        if len(eyes) > 1:
-            cv.rectangle(frame, (x, y), (x + w, y + h), red, 2)
-            return True
-    return False
-
-def send_text(file):
-    now = datetime.now()
-
-    email = "throwaway3123456@gmail.com"
-    password = "fgzpxpcvkycqhsye"
-    subject = 'Unauthorized User Detected'
-    recipient = '5128155645@mms.att.net'
-    current_time = now.strftime("%H:%M:%S")
-    content = "Time = " + str(current_time)
-    try:
-        yag = yagmail.SMTP(user=email, password=password)
-        yag.send(to=recipient,
-                 subject=subject,
-                 contents=content,
-                 attachments=file
-                 )
-        print("Text sent successfully")
-    except:
-         print("Error, text was not sent")
 
 
 if __name__ == "__main__":

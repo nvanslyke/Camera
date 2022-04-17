@@ -9,6 +9,7 @@ import sendtext
 red = (0, 0, 255)
 green = (0, 255, 0)
 
+
 def main():
 
     nathan = face_recognition.load_image_file("nathan.jpg")
@@ -23,11 +24,9 @@ def main():
     else:
         video.open(0, cv.CAP_V4L)
 
-
     while True:
 
         useless, frame = video.read()
-
 
         face_locations = face_recognition.face_locations(frame)
         face_encodings = face_recognition.face_encodings(frame, face_locations)
@@ -47,13 +46,11 @@ def main():
                 os.remove("UnknownUser.jpg")
                 breaker = True
 
-
             if breaker:
                 break
 
         if breaker:
             break
-
 
         cv.imshow('pic', frame)
 
@@ -62,6 +59,7 @@ def main():
 
     video.release()
     cv.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()

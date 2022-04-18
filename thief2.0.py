@@ -9,12 +9,16 @@ import sendtext
 red = (0, 0, 255)
 green = (0, 255, 0)
 
+
 def main():
 
-    nathan = face_recognition.load_image_file("nathan.jpg")
+    nathan = face_recognition.load_image_file("nathan.JPG")
     nathan_encoding = face_recognition.face_encodings(nathan)[0]
 
-    authorized_encodings = [nathan_encoding]
+    aaroh = face_recognition.load_image_file("aaroh.jpg")
+    aaroh_encoding = face_recognition.face_encodings(aaroh)[0]
+
+    authorized_encodings = [aaroh_encoding, nathan_encoding]
 
     video = cv.VideoCapture()
 
@@ -23,11 +27,9 @@ def main():
     else:
         video.open(0, cv.CAP_V4L)
 
-
     while True:
 
         useless, frame = video.read()
-
 
         face_locations = face_recognition.face_locations(frame)
         face_encodings = face_recognition.face_encodings(frame, face_locations)
@@ -38,7 +40,7 @@ def main():
             results = face_recognition.compare_faces(authorized_encodings, face_encoding)
             print(results)
 
-            if results[0]:
+            if True in results:
                 cv.rectangle(frame, (h, x), (y, w), green, 2)
             else:
                 cv.rectangle(frame, (h, x), (y, w), red, 2)
@@ -47,13 +49,11 @@ def main():
                 os.remove("UnknownUser.jpg")
                 breaker = True
 
-
             if breaker:
                 break
 
         if breaker:
             break
-
 
         cv.imshow('pic', frame)
 
@@ -62,6 +62,7 @@ def main():
 
     video.release()
     cv.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()

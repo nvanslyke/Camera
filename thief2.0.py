@@ -6,6 +6,7 @@ import os
 import pickle
 
 import sendtext
+import faceload
 
 red = (0, 0, 255)
 green = (0, 255, 0)
@@ -13,9 +14,15 @@ green = (0, 255, 0)
 
 def main():
 
-    with open('dataset_faces.dat', 'rb') as f:
-	       authorized_encodings = pickle.load(f)
-
+   
+    try:
+        with open('dataset_faces.dat', 'rb') as f:
+            authorized_encodings = pickle.load(f)
+    except:
+            faceload.main()
+            with open('dataset_faces.dat', 'rb') as f:
+                authorized_encodings = pickle.load(f)
+    
     video = cv.VideoCapture()
 
     if platform.system() == "Windows":

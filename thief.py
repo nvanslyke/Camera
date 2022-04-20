@@ -6,6 +6,8 @@ import PIL
 import time
 import numpy as np
 import face_recognition
+
+import recognizeface
 import sendtext
 import facedetect
 
@@ -28,10 +30,11 @@ def main():
         grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
         if facedetect.face_detected(face_cascade, eye_cascade, grey, frame):
-            cv.imwrite("UnknownUser.jpg", frame)
-            sendtext.send_text("UnknownUser.jpg")
-            os.remove("UnknownUser.jpg")
-            break
+            if recognizeface.recognize_face("nathan.jpg", frame) == False:
+                cv.imwrite("UnknownUser.jpg", frame)
+                sendtext.send_text("UnknownUser.jpg")
+                os.remove("UnknownUser.jpg")
+                break
 
         cv.imshow('cam', frame)
         if cv.waitKey(1) == ord('q'):

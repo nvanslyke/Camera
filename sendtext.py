@@ -21,4 +21,4 @@ def send_text(file):
                  )
         print("Text sent successfully")
     except:
-         print("Error, text was not sent")
+        print("Error, text was not sent")

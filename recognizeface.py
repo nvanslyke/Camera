@@ -1,6 +1,7 @@
 import face_recognition
 
 
+
 def recognize_face(image, compare):
 
     try:

@@ -3,6 +3,7 @@ import numpy
 import cv2 as cv
 import platform
 import os
+import pickle
 
 import sendtext
 
@@ -12,13 +13,8 @@ green = (0, 255, 0)
 
 def main():
 
-    nathan = face_recognition.load_image_file("nathan.JPG")
-    nathan_encoding = face_recognition.face_encodings(nathan)[0]
-
-    aaroh = face_recognition.load_image_file("aaroh.jpg")
-    aaroh_encoding = face_recognition.face_encodings(aaroh)[0]
-
-    authorized_encodings = [aaroh_encoding, nathan_encoding]
+    with open('dataset_faces.dat', 'rb') as f:
+	       authorized_encodings = pickle.load(f)
 
     video = cv.VideoCapture()
 

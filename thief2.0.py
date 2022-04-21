@@ -4,6 +4,7 @@ import cv2 as cv
 import platform
 import os
 import pickle
+import time
 
 import sendtext
 import faceload
@@ -38,19 +39,26 @@ def main():
         face_encodings = face_recognition.face_encodings(frame, face_locations)
 
         breaker = False
+        i = 0
         for (x, y, w, h), face_encoding in zip(face_locations, face_encodings):
-
+            
+            i += 1
+            #print(str(i) + str(len(face_locations)))
             results = face_recognition.compare_faces(authorized_encodings, face_encoding)
             print(results)
 
             if True in results:
                 cv.rectangle(frame, (h, x), (y, w), green, 2)
-            else:
+                time.sleep(10)
+                break
+            elif i >= len(face_locations):
                 cv.rectangle(frame, (h, x), (y, w), red, 2)
                 cv.imwrite("UnknownUser.jpg", frame)
                 sendtext.send_text("UnknownUser.jpg")
                 os.remove("UnknownUser.jpg")
                 breaker = True
+            else:
+                cv.rectangle(frame, (h, x), (y, w), red, 2)
 
             if breaker:
                 break

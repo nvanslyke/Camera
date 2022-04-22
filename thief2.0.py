@@ -5,7 +5,7 @@ import platform
 import os
 import pickle
 import time
-
+import gui
 import sendtext
 import faceload
 
@@ -20,9 +20,11 @@ def main():
         with open('dataset_faces.dat', 'rb') as f:
             authorized_encodings = pickle.load(f)
     except:
-            faceload.main()
+            #faceload.load_faces()
+            gui.main()
             with open('dataset_faces.dat', 'rb') as f:
                 authorized_encodings = pickle.load(f)
+
     
     video = cv.VideoCapture()
 

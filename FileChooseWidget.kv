@@ -1,0 +1,13 @@
+
+<FileChooseWidget>:
+	cols:2
+	id:file_choose_widget
+
+
+	FileChooserIconView:
+		id:filechooser
+		on_selection:file_choose_widget.selected(filechooser.selection)
+
+	Image:
+		id:image
+		source:""

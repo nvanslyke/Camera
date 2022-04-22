@@ -1,18 +1,26 @@
 import face_recognition
 import pickle
 
-all_face_encodings = {}
 
-nathan = face_recognition.load_image_file("nathan.JPG")
-nathan_encoding = face_recognition.face_encodings(nathan)[0]
+def load_faces(file):
 
-aaroh = face_recognition.load_image_file("aaroh.jpg")
-aaroh_encoding = face_recognition.face_encodings(aaroh)[0]
+    all_face_encodings = {}
+
+    #nathan = face_recognition.load_image_file("nathan.JPG")
+    #nathan_encoding = face_recognition.face_encodings(nathan)[0]
+
+    #aaroh = face_recognition.load_image_file("aaroh.jpg")
+    #aaroh_encoding = face_recognition.face_encodings(aaroh)[0]
 
 
-all_face_encodings = [nathan_encoding, aaroh_encoding]
+    #all_face_encodings = [nathan_encoding, aaroh_encoding]
+    
+    face = face_recognition.load_image_file(file)
+    face_encoding = face_recognition.face_encodings(face)[0]
 
-with open('dataset_faces.dat', 'wb') as f:
-    pickle.dump(all_face_encodings, f)
+    all_face_ecodings = [face_encoding]
 
-print("loaded authorized faces")
+    with open('dataset_faces.dat', 'wb') as f:
+        pickle.dump(all_face_encodings, f)
+
+    print("loaded authorized faces")

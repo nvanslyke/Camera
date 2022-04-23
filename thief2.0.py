@@ -5,9 +5,9 @@ import platform
 import os
 import pickle
 import time
-import gui
+#import gui
 import sendtext
-import faceload
+#import faceload
 
 red = (0, 0, 255)
 green = (0, 255, 0)
@@ -15,7 +15,8 @@ green = (0, 255, 0)
 
 def main():
 
-   
+  
+    '''
     try:
         with open('dataset_faces.dat', 'rb') as f:
             authorized_encodings = pickle.load(f)
@@ -24,6 +25,9 @@ def main():
             gui.main()
             with open('dataset_faces.dat', 'rb') as f:
                 authorized_encodings = pickle.load(f)
+'''
+    with open('dataset_faces.dat', 'rb') as f:
+        authorized_encodings = pickle.load(f)
 
     
     video = cv.VideoCapture()
@@ -34,9 +38,8 @@ def main():
         video.open(0, cv.CAP_V4L)
 
     while True:
-
+       
         useless, frame = video.read()
-
         face_locations = face_recognition.face_locations(frame)
         face_encodings = face_recognition.face_encodings(frame, face_locations)
 
@@ -48,10 +51,10 @@ def main():
             #print(str(i) + str(len(face_locations)))
             results = face_recognition.compare_faces(authorized_encodings, face_encoding)
             print(results)
-
+            print("bruh")
             if True in results:
                 cv.rectangle(frame, (h, x), (y, w), green, 2)
-                time.sleep(10)
+                #time.sleep(10)
                 break
             elif i >= len(face_locations):
                 cv.rectangle(frame, (h, x), (y, w), red, 2)
@@ -68,11 +71,13 @@ def main():
         if breaker:
             break
 
-        cv.imshow('pic', frame)
+        
 
         if cv.waitKey(1) == ord('q'):
             break
-
+        
+        cv.imshow('pic', frame)
+    
     video.release()
     cv.destroyAllWindows()
 

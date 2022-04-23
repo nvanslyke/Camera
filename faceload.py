@@ -18,9 +18,28 @@ def load_faces(file):
     face = face_recognition.load_image_file(file)
     face_encoding = face_recognition.face_encodings(face)[0]
 
-    all_face_ecodings = [face_encoding]
+    all_face_encodings = [face_encoding]
 
     with open('dataset_faces.dat', 'wb') as f:
         pickle.dump(all_face_encodings, f)
 
     print("loaded authorized faces")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

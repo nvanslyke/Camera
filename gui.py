@@ -25,7 +25,7 @@ class FileChooseButton(Widget):
         file_choose_btn.bind(on_press=self._on_button_press)
         self.add_widget(file_choose_btn)
 
-    def _on_button_press():
+    def _on_button_press(x, y):
         return FileChooseWidget()
     
 
@@ -38,6 +38,8 @@ class Gui(App):
 
         layout.add_widget(file_choose_btn)
         
+        #layout.add_widget(Label())
+
         Window.bind(on_drop_file=self._on_file_drop)
 
 

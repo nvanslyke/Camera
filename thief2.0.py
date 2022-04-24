@@ -9,6 +9,7 @@ import time
 import sendtext
 #import faceload
 
+
 red = (0, 0, 255)
 green = (0, 255, 0)
 
@@ -51,17 +52,20 @@ def main():
             #print(str(i) + str(len(face_locations)))
             results = face_recognition.compare_faces(authorized_encodings, face_encoding)
             print(results)
-            print("bruh")
             if True in results:
                 cv.rectangle(frame, (h, x), (y, w), green, 2)
+                possible_unauthorized = False
                 #time.sleep(10)
                 break
             elif i >= len(face_locations):
-                cv.rectangle(frame, (h, x), (y, w), red, 2)
-                cv.imwrite("UnknownUser.jpg", frame)
-                sendtext.send_text("UnknownUser.jpg")
-                os.remove("UnknownUser.jpg")
-                breaker = True
+                if possible_unauthorized == False:
+                    possible_unauthorized = True
+                elif possible_unauthorized == True:
+                    cv.rectangle(frame, (h, x), (y, w), red, 2)
+                    cv.imwrite("UnknownUser.jpg", frame)
+                    sendtext.send_text("UnknownUser.jpg")
+                    os.remove("UnknownUser.jpg")
+                    breaker = True
             else:
                 cv.rectangle(frame, (h, x), (y, w), red, 2)
 

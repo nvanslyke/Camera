@@ -37,6 +37,7 @@ def main():
         video.open(0, cv.CAP_DSHOW)
     else:
         video.open(0, cv.CAP_V4L)
+    possible_unauthorized = False
 
     while True:
        
@@ -65,6 +66,7 @@ def main():
                     cv.imwrite("UnknownUser.jpg", frame)
                     sendtext.send_text("UnknownUser.jpg")
                     os.remove("UnknownUser.jpg")
+                    possible_unauthorized = False
                     breaker = True
             else:
                 cv.rectangle(frame, (h, x), (y, w), red, 2)

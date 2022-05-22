@@ -1,13 +1,13 @@
 import kivy
 #kivy.require('1.10.0')
-import faceload as fc
 from kivy.app import App
 from kivy.uix.button import Label
 from kivy.core.window import Window
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 
 class FileChooseWidget(GridLayout):
 
@@ -17,43 +17,53 @@ class FileChooseWidget(GridLayout):
         except:
             pass
 
-class FileChooseButton(Widget):
+class FileChooser(Widget):
 
     def __init__(self, **kwargs):
-        super(FileChooseButton, self).__init__(**kwargs)
+        super(FileChooser, self).__init__(**kwargs)
         file_choose_btn = Button(text = "Choose a File Manually")
         file_choose_btn.bind(on_press=self._on_button_press)
         self.add_widget(file_choose_btn)
 
     def _on_button_press(x, y):
-        return FileChooseWidget()
-    
+
+        layout = GridLayout(cols = 1, padding = 10)
+        layout.add_widget(FileChooseWidget())
+        
+        label = Label(text = "Drop A File Here")
+        layout.add_widget(label)
+
+        closeButton = Button(text = "Done")
+        layout.add_widget(closeButton)
+        
+
+        popup = Popup(title = "Drag and Drop",
+                          content=layout,
+                          size_hint=(None, None), size=(400,400)
+            )
+        popup.open()
+
+        Window.bind(on_drop_file=FileChooser._on_file_drop)
+
+        closeButton.bind(on_press = popup.dismiss)
+        #return FileChooseWidget()
+    def _on_file_drop(self, file_path, x, y):
+        print(file_path)
+
+
 
 class Gui(App):
 
     def build(self):
-        layout = FloatLayout()
-        
-        file_choose_btn = FileChooseButton()
+        layout = BoxLayout()
 
-        layout.add_widget(file_choose_btn)
-        
-        #layout.add_widget(Label())
+        chooser_button = FileChooser()
 
-        Window.bind(on_drop_file=self._on_file_drop)
+        layout.add_widget(chooser_button)
 
 
-        #Window.bind(on_press=self._button_press)
-        
         return layout
-        
-        #return Label(text = "Drag and Drop File here")
-        #return file_choose_btn
     
-    def _on_file_drop(self, window, file_path, x, y):
-        print(file_path)
-        return fc.load_faces(str(file_path)[2:len(str(file_path))-1])
-
 
 def main():
     loadfile = Gui()

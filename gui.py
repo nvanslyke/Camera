@@ -22,7 +22,7 @@ class DragNDrop(Widget):
 
     def __init__(self, **kwargs):
         super(DragNDrop, self).__init__(**kwargs)
-        file_choose_btn = Button(text = "Choose a File Manually", size = (400, 400))
+        file_choose_btn = Button(text = "Choose a File Manually")
         file_choose_btn.bind(on_press=self._on_button_press)
         self.add_widget(file_choose_btn)
 

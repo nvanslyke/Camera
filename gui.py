@@ -9,7 +9,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 
-class FileChooseWidget(GridLayout):
+class DragNDropWidget(GridLayout):
 
     def selected(GridLayout, filename):
         try:
@@ -17,10 +17,10 @@ class FileChooseWidget(GridLayout):
         except:
             pass
 
-class FileChooser(Widget):
+class DragNDrop(Widget):
 
     def __init__(self, **kwargs):
-        super(FileChooser, self).__init__(**kwargs)
+        super(DragNDrop, self).__init__(**kwargs)
         file_choose_btn = Button(text = "Choose a File Manually")
         file_choose_btn.bind(on_press=self._on_button_press)
         self.add_widget(file_choose_btn)
@@ -28,7 +28,7 @@ class FileChooser(Widget):
     def _on_button_press(x, y):
 
         layout = GridLayout(cols = 1, padding = 10)
-        layout.add_widget(FileChooseWidget())
+        layout.add_widget(DragNDropWidget())
         
         label = Label(text = "Drop A File Here")
         layout.add_widget(label)
@@ -43,10 +43,10 @@ class FileChooser(Widget):
             )
         popup.open()
 
-        Window.bind(on_drop_file=FileChooser._on_file_drop)
+        Window.bind(on_drop_file=DragNDrop._on_file_drop)
 
         closeButton.bind(on_press = popup.dismiss)
-        #return FileChooseWidget()
+        #return DragNDropWidget()
     def _on_file_drop(self, file_path, x, y):
         print(file_path)
 
@@ -57,7 +57,7 @@ class Gui(App):
     def build(self):
         layout = BoxLayout()
 
-        chooser_button = FileChooser()
+        chooser_button = DragNDrop()
 
         layout.add_widget(chooser_button)
 
